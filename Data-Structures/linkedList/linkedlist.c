@@ -23,33 +23,22 @@ void pushInIndex(Node **head,int index);
 int getValueInIndex(Node **head,int index);
 int getIndexInValue(Node **head,int value);
 void popValue(Node **head,int value);
+unsigned int getLength(Node **head);
+Node * reverse(Node **head);
 
 
 int main(){
-    Node *head;
+    Node *head,*newHead;
+    printf("The lenght is: %d\n",getLength(&head));
     push(&head,10);
     push(&head,11);
     push(&head,12);
     push(&head,13);
     push(&head,14);
+    printf("The lenght is: %d\n",getLength(&head));
     display(&head);
-    pop(&head);
-    display(&head);
-    popInFront(&head);
-    display(&head);
-    pushInFront(&head,20); 
-    display(&head);
-
-    int index = 3;
-    int value =12;
-    printf("The value in index: %d is: %d\n",index,getValueInIndex(&head, index));
-    printf("The index of value: %d is: %d\n",value,getIndexInValue(&head, value));
-    
-    popValue(&head,12);
-    display(&head);
-    popValue(&head,10); 
-    display(&head);
-
+    newHead = reverse(&head);
+    display(&newHead);
 }
 
 
@@ -197,4 +186,34 @@ void display(Node **head){
     printf("\n");
 }
 
+unsigned int getLength(Node **head){
+    Node *current;
+    unsigned int i = 0;
+    if(*head == NULL){
+        return i;
+    }
+    current = *head;
+    while(current != NULL){
+        i++;
+        current = current->nextNode;
+    }
+    return i;
+}
+
+Node * reverse(Node **head){
+    Node *current,*prev,*next;
+    prev = NULL;
+    if(*head == NULL){ 
+        printf("The list is empty\n");
+        exit(EXIT_FAILURE);
+    }
+    current = *head;
+    while(current != NULL){
+        next = current->nextNode;
+        current->nextNode = prev;
+        prev = current;
+        current = next;
+    }
+    return prev;
+}
 
