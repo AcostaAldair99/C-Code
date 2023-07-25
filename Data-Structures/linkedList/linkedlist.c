@@ -22,6 +22,7 @@ void pushInFront(Node **head,int value);
 void pushInIndex(Node **head,int index);
 int getValueInIndex(Node **head,int index);
 int getIndexInValue(Node **head,int value);
+void popValue(Node **head,int value);
 
 
 int main(){
@@ -31,18 +32,23 @@ int main(){
     push(&head,12);
     push(&head,13);
     push(&head,14);
-    // display(&head);
-    // pop(&head);
-    // display(&head);
-    // popInFront(&head);
-    // display(&head);
-    // pushInFront(&head,20); 
+    display(&head);
+    pop(&head);
+    display(&head);
+    popInFront(&head);
+    display(&head);
+    pushInFront(&head,20); 
     display(&head);
 
     int index = 3;
-    int value =14;
+    int value =12;
     printf("The value in index: %d is: %d\n",index,getValueInIndex(&head, index));
     printf("The index of value: %d is: %d\n",value,getIndexInValue(&head, value));
+    
+    popValue(&head,12);
+    display(&head);
+    popValue(&head,10); 
+    display(&head);
 
 }
 
@@ -90,6 +96,32 @@ void pop(Node **head){
     free(current);
 
 }
+
+void popValue(Node **head,int value){
+    Node *current,*prev,*next;
+    if(*head == NULL){
+        printf("The list is empty !!\n");
+        exit(EXIT_FAILURE); 
+    }
+    current = *head;
+    
+    if(current->value == value){
+        popInFront(head);
+        return;
+    }
+
+    while(current->nextNode != NULL){
+        if(value == current->value){
+            break;
+        }
+        prev = current;
+        current = current->nextNode;
+    }
+    next = current->nextNode;
+    prev->nextNode = next;
+    free(current);
+}
+
 
 void pushInFront(Node **head,int value){
     Node *new;
