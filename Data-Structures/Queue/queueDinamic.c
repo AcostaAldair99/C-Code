@@ -19,7 +19,8 @@ void enqueue(Item **head,Item **tail,int value);
 void dequeue(Item **head);
 void dequeueTail(Item **head,Item **tail);
 void display(Item **head,Item **tail);
-
+int peek(Item **head);
+int rear(Item **tail);
 
 
 int main(){
@@ -39,7 +40,8 @@ int main(){
     enqueue(&head,&tail,22);
     // dequeueTail(&head,&tail);
     display(&head,&tail);
-    
+    printf("\nThe peek result: %d\nThe rear result: %d\n",peek(&head),rear(&tail)); 
+
 }
 
 void dequeue(Item **head){
@@ -89,7 +91,21 @@ void enqueue(Item **head,Item **tail,int value){
     *tail = new;
     return;
 }
+int peek(Item **head){
+   if(*head == NULL){
+       printf("The queue is empty !!\n");
+       return -1;
+   } 
+   return (*head)->value;
+}
 
+int rear(Item **tail){
+    if(*tail == NULL){
+        printf("The queue is empty !!\n");
+        return -1;
+    }
+    return (*tail)->value;
+}
 
 Item * createItem(int value){
    Item *item = (Item*)malloc(sizeof(Item));
