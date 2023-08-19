@@ -22,10 +22,10 @@ void pushInFront(Node **head,int value);
 void pushInIndex(Node **head,int index);
 int getValueInIndex(Node **head,int index);
 int getIndexInValue(Node **head,int value);
-void popValue(Node **head,int value);
+void popValue(Node **head,Node *value);
 unsigned int getLength(Node **head);
 Node * reverse(Node **head);
-
+Node *getNode(Node **head,int value);
 
 int main(){
     Node *head,*newHead;
@@ -35,10 +35,10 @@ int main(){
     push(&head,12);
     push(&head,13);
     push(&head,14);
-    printf("The lenght is: %d\n",getLength(&head));
     display(&head);
-    newHead = reverse(&head);
-    display(&newHead);
+    Node *node = getNode(&head,11);
+    popValue(&head,node);
+    display(&head);
 }
 
 
@@ -52,19 +52,17 @@ Node * createNode(int value){
 
 
 void push(Node **head,int value){
-    Node *new,*current;
+    Node *new;
     new = createNode(value);
     if(*head == NULL){
         *head = new;
         return;
     }
-    current = *head;
     
-    while(current->nextNode != NULL){
-       current = current->nextNode; 
+    while((*head)->nextNode != NULL){
+       head = &(*head)->nextNode; 
     }
-    current->nextNode = new;
-    return;
+    (*head)->nextNode = new;
 }
 
 
@@ -86,29 +84,17 @@ void pop(Node **head){
 
 }
 
-void popValue(Node **head,int value){
-    Node *current,*prev,*next;
+void popValue(Node **head,Node *value){
     if(*head == NULL){
         printf("The list is empty !!\n");
         exit(EXIT_FAILURE); 
     }
-    current = *head;
-    
-    if(current->value == value){
-        popInFront(head);
-        return;
-    }
 
-    while(current->nextNode != NULL){
-        if(value == current->value){
-            break;
-        }
-        prev = current;
-        current = current->nextNode;
+    while(*head != value){
+        head = &(*head)->nextNode;
     }
-    next = current->nextNode;
-    prev->nextNode = next;
-    free(current);
+    *head = value->nextNode;
+    free(value);
 }
 
 
@@ -172,15 +158,12 @@ void popInFront(Node **head){
     free(current);
 }
 
-
-
-
 void display(Node **head){
     Node *current;
     current = *head;
 
     while(current != NULL){
-        printf("%d - ",current->value);
+        printf("%d - %p -> %p\n",current->value,current,current->nextNode);
         current = current->nextNode;
     }
     printf("\n");
@@ -217,3 +200,11 @@ Node * reverse(Node **head){
     return prev;
 }
 
+Node *getNode(Node **head,int value){
+    Node *current;
+    current = *head;    
+    while((*head)->value != value){
+        head = &(*head)->nextNode;
+    }
+    return *head;
+}

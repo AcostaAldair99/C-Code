@@ -22,14 +22,12 @@ unsigned int * setHashTable(char *data);
 unsigned int getAlphabetNumber(unsigned int *ht);
 
 int main(){
-    char *data = "thissssiibbs";
+    char *data = "thissssiibbs   g f fs t s i  i i i i";
     unsigned alphabetSize;
 
     unsigned int *ht = setHashTable(data); 
     alphabetSize = getAlphabetNumber(ht);
     Node *alphabet = allocateAlphabet(alphabetSize);
-
-
     setAlphabet(ht,alphabet);
     free(ht);
     sortArray(alphabet, alphabetSize);

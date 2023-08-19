@@ -1,56 +1,11 @@
+//In this versión use more features of reccursion
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdbool.h>
 #include<string.h>
+#include "binaryTree.h"
 
-#define INDENT 1
-
-struct node{
-    int value;
-    struct node *left;
-    struct node *right;
-};
-
-typedef struct node Node;
-
-
-Node * createNode(int value);
-Node * addNode(Node *root,int value);
-void displayTree(Node *root,int indent);
-void printIndent(int indent);
-void display(Node *root);
-Node * searchInTree(Node *root,int search);
-Node * deleteNode(Node *root, int value);
-Node *findMin(Node *root);
-Node *findMax(Node *root);
-void deallocateTree(Node **root);
-bool isLeaf(Node *node);
-
-int main(){
-    Node *root = createNode(15);
-
-    addNode(root,19);
-    addNode(root,8);
-    addNode(root,9);
-    addNode(root,6);
-    addNode(root,16);
-    addNode(root,4);  
-    addNode(root,3);  
-
-    display(root);
-    
-    Node *s = searchInTree(root,4);
-    printf("\n%p -> %d\n",s,s->value);
-
-    root = deleteNode(root,4);
-    root = deleteNode(root,16);   
-    display(root);
-
-    deallocateTree(&root);
-
-}
-
-
+#define INDENT 2
 
 Node * createNode(int value){
     Node *n = (Node*)malloc(sizeof(Node));
@@ -66,18 +21,19 @@ Node * createNode(int value){
 }
 
 
-Node * addNode(Node *root,int value){
-    if(root == NULL){
-        return createNode(value);
+Node * addNode(Node **root,int value){
+    if(*root == NULL){
+        *root = createNode(value);
+        return *root;
     } 
     
-    if(value < root->value){
-        root->left = addNode(root->left,value);
-    }else if(value > root->value){
-        root->right = addNode(root->right,value);
+    if(value < (*root)->value){
+        (*root)->left = addNode(&(*root)->left,value);
+    }else if(value > (*root)->value){
+        (*root)->right = addNode(&(*root)->right,value);
     }
 
-    return root;
+    return *root;
 }
 
 Node * deleteNode(Node *root,int value){
@@ -91,7 +47,7 @@ Node * deleteNode(Node *root,int value){
         root->right = deleteNode(root->right,value);
     }else{
 
-        // A node with one children (left or right)
+        // Found the node to delete but have one children (left or right) , first check if is a leaf to deleted
         if(isLeaf(root)){ 
             free(root);
             return NULL;
