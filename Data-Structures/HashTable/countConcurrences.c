@@ -18,29 +18,43 @@ Node *allocateAlphabet(unsigned int size);
 void sortArray(Node *array,int size);
 void setAlphabet(unsigned int *ht,Node *alphabet);
 void swap(Node *a,Node*b);
+unsigned int * setHashTable(char *data);
+unsigned int getAlphabetNumber(unsigned int *ht);
 
 int main(){
-    char *data = "thissssiibb  biengenindos";
-    unsigned int *ht = allocateArray(TABLE_SIZE);
-    unsigned int hashIndex;
+    char *data = "thissssiibbs";
+    unsigned alphabetSize;
 
+    unsigned int *ht = setHashTable(data); 
+    alphabetSize = getAlphabetNumber(ht);
+    Node *alphabet = allocateAlphabet(alphabetSize);
+
+
+    setAlphabet(ht,alphabet);
+    free(ht);
+    sortArray(alphabet, alphabetSize);
+    display(alphabet,alphabetSize);
+}
+
+unsigned int * setHashTable(char *data){
+    unsigned int hashIndex;
+    unsigned int *ht = allocateArray(TABLE_SIZE);
     while(*data != '\0'){
         hashIndex = *data - ' ';
         ht[hashIndex]++; 
         data++;
     }
-    
-    unsigned int size = 0; 
-    for(int i = 0;i<TABLE_SIZE;i++){
-        if(ht[i]>0){
+    return ht;
+}
+
+unsigned int getAlphabetNumber(unsigned int *ht){
+    unsigned int size = 0;
+    for(int i=0;i<TABLE_SIZE;i++){
+        if(ht[i] > 0 ){
             size++;
         }
     }
-    Node *alphabet = allocateAlphabet(size);
-    setAlphabet(ht,alphabet);
-    free(ht);
-    
-    display(alphabet,size);
+    return size;
 }
 
 unsigned int * allocateArray(unsigned int size){
@@ -52,7 +66,7 @@ unsigned int * allocateArray(unsigned int size){
 }
 
 void display(Node *array,unsigned int size){
-    printf("Alphabet: \n");
+    printf("Alphabet Size: %d \n",size);
     for(int i = 0; i<size;i++){
         printf("%c - [%d]\n",array[i].character,array[i].concurrence);
     }
@@ -66,15 +80,16 @@ Node *allocateAlphabet(unsigned int size){
     return a;
 }
 
-void sortArray(Node array[],int size){
+void sortArray(Node *array,int size){
+    int movements;
     bool isUnsorted = true;
     while(isUnsorted){
-        int movements = 0 ; 
-        for(int i=0;i<(size+1);i++){
+        movements = 0 ; 
+        for(int i=0;i<(size-1);i++){
             if(array[i].concurrence > array[i+1].concurrence){
-                Node temp = array[i];
-                array[i] = array[i+1];
-                array[i+1] = temp;
+                Node temp = array[i+1];
+                array[i+1] =  array[i];
+                array[i] = temp;
                 movements++;
             }
         }
